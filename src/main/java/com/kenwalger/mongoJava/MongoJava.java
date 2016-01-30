@@ -8,6 +8,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MongoJava {
 
     public static void main(String[] args) {
@@ -20,6 +23,9 @@ public class MongoJava {
 
             //Insert a document into the "characters" collection.
             MongoCollection<Document> collection = database.getCollection("characters");
+
+            // Delete the collection and start fresh
+            collection.drop();
 
             Document mickeyMouse = new Document();
             Document charlieBrown = new Document();
@@ -43,6 +49,23 @@ public class MongoJava {
                     System.out.println("Document with that id already exists");
                 }
             }
+
+            // Basic data on collection
+            System.out.println("Collection size: " + collection.count() + " documents. \n");
+
+            // Create and insert multiple documents
+            List<Document> documents = new ArrayList<Document>();
+            for (int i = 3; i < 51; i++) {
+                documents.add(new Document ("_id", i)
+                        .append("characterName", "")
+                        .append("creator", "")
+                        .append("pet", "")
+                );
+            }
+            collection.insertMany(documents);
+
+            // Basic data on collection
+            System.out.println("Collection size: " + collection.count() + " documents. \n");
 
         } catch (Exception exception) {
             System.err.println(exception.getClass().getName() + ": " + exception.getMessage());
