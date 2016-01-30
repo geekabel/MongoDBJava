@@ -98,6 +98,23 @@ public class MongoJava {
                 cursor.close();
             }
 
+            //Delete data
+            System.out.println("\nDelete documents with an id greater than or equal to 4.");
+            collection.deleteMany(Filters.gte("_id", 4));
+
+            // Find and print ALL documents in the collection
+            System.out.println("\nPrint all documents.");
+
+            MongoCursor<Document> cursor2 = collection.find().iterator();
+            try {
+                while (cursor2.hasNext()) {
+                    System.out.println(cursor2.next().toJson());
+                }
+
+            } finally {
+                cursor2.close();
+            }
+
         } catch (Exception exception) {
             System.err.println(exception.getClass().getName() + ": " + exception.getMessage());
         }
