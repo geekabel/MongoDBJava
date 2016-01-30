@@ -5,6 +5,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
@@ -83,6 +84,19 @@ public class MongoJava {
             System.out.println("\nUpdated third document:");
             Document dilbert = collection.find(Filters.eq("_id", 3)).first();
             System.out.println(dilbert.toJson());
+
+            // Find and print ALL documents in the collection
+            System.out.println("Print the documents.");
+
+            MongoCursor<Document> cursor = collection.find().iterator();
+            try {
+                while (cursor.hasNext()) {
+                    System.out.println(cursor.next().toJson());
+                }
+
+            } finally {
+                cursor.close();
+            }
 
         } catch (Exception exception) {
             System.err.println(exception.getClass().getName() + ": " + exception.getMessage());
