@@ -6,6 +6,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -66,6 +67,22 @@ public class MongoJava {
 
             // Basic data on collection
             System.out.println("Collection size: " + collection.count() + " documents. \n");
+
+            // Update a document
+            // print the third document before update.
+            Document third = collection.find(Filters.eq("_id", 3)).first();
+            System.out.println("Original third document:");
+            System.out.println(third.toJson());
+
+            collection.updateOne(new Document("_id", 3),
+                    new Document("$set", new Document("characterName", "Dilbert")
+                            .append("creator", new Document("firstName", "Scott").append("lastName", "Adams"))
+                            .append("pet", "Dogbert"))
+            );
+
+            System.out.println("\nUpdated third document:");
+            Document dilbert = collection.find(Filters.eq("_id", 3)).first();
+            System.out.println(dilbert.toJson());
 
         } catch (Exception exception) {
             System.err.println(exception.getClass().getName() + ": " + exception.getMessage());
